@@ -34,7 +34,7 @@ module.exports.getSportById = async (req, res, next) => {
     if (!sport) {
       return next(createError(404, 'sport not found'));
     }
-    res.status(200).send({ data: { sport } });
+    res.status(200).send({ data: sport });
   } catch (error) {
     next(createError(400, error.message));
   }
