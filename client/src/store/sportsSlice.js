@@ -1,5 +1,35 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAllSports, fetchSportById, fetchCreateSport } from '../api';
+import {
+  fetchAllSports,
+  fetchSportById,
+  fetchCreateSport,
+  deleteSportById,
+  updateSportById,
+} from '../api';
+
+export const updateSportByIdAsync = createAsyncThunk(
+  'sports/deleteSportById',
+  async ({ id, formData }, thunkAPI) => {
+    try {
+      const response = await updateSportById({ id, formData });
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error?.message);
+    }
+  }
+);
+
+export const deleteSportByIdAsync = createAsyncThunk(
+  'sports/deleteSportById',
+  async (id, thunkAPI) => {
+    try {
+      const response = await deleteSportById(id);
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error?.message);
+    }
+  }
+);
 
 export const fetchCreateSportAsync = createAsyncThunk(
   'sports/fetchCreateSport',
@@ -57,24 +87,37 @@ const sportsSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(deleteSportByIdAsync.fulfilled, (state, action) => {
+      state.isLoading = false;
+      //action.payload - deleted sport
+      state.sports = state.sports.filter(
+        (sport) => sport._id !== action.payload._id
+      );
+      state.error = null;
+    });
     builder.addCase(fetchCreateSportAsync.fulfilled, (state, action) => {
       state.isLoading = false;
       state.createdSport = action.payload;
+      state.error = null;
     });
     builder.addCase(fetchSportByIdAsync.fulfilled, (state, action) => {
       state.selectedSport = action.payload;
       state.isLoading = false;
+      state.error = null;
     });
     builder.addCase(fetchAllSportsAsync.fulfilled, (state, action) => {
       state.sports = action.payload;
       state.isLoading = false;
+      state.error = null;
     });
     builder.addCase(fetchSportByIdAsync.pending, pendingCase);
     builder.addCase(fetchAllSportsAsync.pending, pendingCase);
     builder.addCase(fetchCreateSportAsync.pending, pendingCase);
+    builder.addCase(deleteSportByIdAsync.pending, pendingCase);
     builder.addCase(fetchCreateSportAsync.rejected, rejectedCase);
     builder.addCase(fetchSportByIdAsync.rejected, rejectedCase);
     builder.addCase(fetchAllSportsAsync.rejected, rejectedCase);
+    builder.addCase(deleteSportByIdAsync.rejected, rejectedCase);
   },
 });
 
