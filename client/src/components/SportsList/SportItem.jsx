@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@mdi/react';
 import { mdiTrashCanOutline } from '@mdi/js';
-import { deleteSportByIdAsync } from '../store/sportsSlice';
+import { deleteSportByIdAsync } from '../../store/sportsSlice';
 
 const SportItem = ({ sport }) => {
   const dispatch = useDispatch();

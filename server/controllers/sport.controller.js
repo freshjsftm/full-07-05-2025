@@ -45,7 +45,7 @@ module.exports.updateSportById = async (req, res, next) => {
     const { idSport } = req.params;
     const { name, isOlimpic } = req.body; //isOlimpic = false 
     
-    const sport = await Sport.findById(idSport);
+    const sport = await Sport.findById(idSport).populate('athletes');
     if (!sport) {
       return next(createError(404, 'sport not found'));
     }
