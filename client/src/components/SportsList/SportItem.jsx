@@ -16,7 +16,7 @@ const SportItem = ({ sport }) => {
     dispatch(deleteSportByIdAsync(sport._id));
   };
   return (
-    <li onClick={navigateToSport} key={sport._id}>
+    <li onClick={navigateToSport}>
       {sport.name}
       
       <Icon onClick={handleDelete} path={mdiTrashCanOutline} size={0.7} />
