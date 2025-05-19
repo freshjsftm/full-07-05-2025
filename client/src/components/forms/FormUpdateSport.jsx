@@ -23,7 +23,7 @@ const FormUpdateSport = ({ sport, handleShowForm }) => {
 
   const initialValues = {
     name: sport.name || '',
-    isOlimpic: sport.isOlimpic || '',
+    isOlimpic: sport.isOlimpic || false,
     image: '',
   };
 

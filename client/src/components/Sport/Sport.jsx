@@ -4,13 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSportByIdAsync } from '../../store/sportsSlice';
 import CONSTANTS from '../../constants';
 import FormUpdateSport from '../forms/FormUpdateSport';
+import AthletesList from '../AthletesList/AthletesList';
 
 const Sport = () => {
   const { sportId } = useParams();
   const dispatch = useDispatch();
-  const { selectedSport, isLoading, error } = useSelector((state) => state.sports);
+  const { selectedSport, isLoading, error } = useSelector(
+    (state) => state.sports
+  );
   const [isShowForm, setIsShowForm] = useState(false);
-  const handleShowForm = () => {  setIsShowForm(!isShowForm); };
+  const [isShowListAthletes, setIsShowListAthletes] = useState(true);
+  const handleShowForm = () => {
+    setIsShowForm(!isShowForm);
+  };
+  const handleShowListAthletes = () => {
+    setIsShowListAthletes(!isShowListAthletes);
+  };
   useEffect(() => {
     dispatch(fetchSportByIdAsync(sportId));
   }, [dispatch, sportId]);
@@ -25,8 +34,21 @@ const Sport = () => {
         src={`${CONSTANTS.API_BASE_URL}${selectedSport?.image}`}
         alt={selectedSport?.name}
       />
-      <button onClick={handleShowForm}> {isShowForm ? 'hide' : 'show'} form update sport </button>
-      {isShowForm && <FormUpdateSport sport={selectedSport} handleShowForm={handleShowForm}/>}
+      <div>
+        <button onClick={handleShowForm}>
+          {isShowForm ? 'hide' : 'show'} form update sport
+        </button>
+        {isShowForm && (
+          <FormUpdateSport
+            sport={selectedSport}
+            handleShowForm={handleShowForm}
+          />
+        )}
+        <button onClick={handleShowListAthletes}>
+          {isShowListAthletes ? 'hide' : 'show'} list athletes
+        </button>
+        {isShowListAthletes && <AthletesList athletes={selectedSport.athletes}/>}
+      </div>
     </article>
   );
 };
