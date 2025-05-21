@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { fetchAllSportsAsync } from '../../store/sportsSlice';
@@ -8,15 +9,19 @@ import CONSTANTS from '../../constants';
 import styles from './form.module.scss';
 
 const FormCreateAthlete = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sports } = useSelector((state) => state.sports);
+
   useEffect(() => {
     dispatch(fetchAllSportsAsync());
   }, [dispatch]);
+
   const onSubmit = (values, formikBag) => {
     console.log(values);
-    dispatch(fetchCreateAthleteAsync(values))
+    dispatch(fetchCreateAthleteAsync(values));
     formikBag.resetForm();
+    navigate(`/sports/${values.sportId}`);
   };
   const showCountry = (country) => (
     <option key={country} value={country}>
@@ -53,8 +58,10 @@ const FormCreateAthlete = () => {
               <select
                 name="country"
                 onChange={(event) => {
-                  //console.dir(event.currentTarget.selectedOptions[0].value);
-                  setFieldValue('country', event.currentTarget.selectedOptions[0].value);
+                  setFieldValue(
+                    'country',
+                    event.currentTarget.selectedOptions[0].value
+                  );
                 }}
               >
                 <option value="">choose country</option>
@@ -74,10 +81,15 @@ const FormCreateAthlete = () => {
             </label>
             <label>
               <span>Sport</span>
-              <select name="sportId" onChange={(event) => {
-                  //console.dir(event.currentTarget.selectedOptions[0].value);
-                  setFieldValue('sportId', event.currentTarget.selectedOptions[0].value);
-                }}>
+              <select
+                name="sportId"
+                onChange={(event) => {
+                  setFieldValue(
+                    'sportId',
+                    event.currentTarget.selectedOptions[0].value
+                  );
+                }}
+              >
                 <option value="">choose sport</option>
                 {sports?.map(showSport)}
               </select>
