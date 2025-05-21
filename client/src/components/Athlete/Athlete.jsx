@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getAthleteByIdAsync } from '../../store/athletesSlice';
 import CONSTANTS from '../../constants';
 
@@ -23,10 +23,18 @@ const Athlete = () => {
     <article>
       <h2>{selectedAthlete?.name}</h2>
       <img
-        src={`${CONSTANTS.API_BASE_URL}${selectedAthlete.avatar}`}
+        src={`${CONSTANTS.API_BASE_URL}${selectedAthlete?.avatar}`}
         alt={`${selectedAthlete?.name}`}
       />
-      <p>{selectedAthlete.country}</p>
+      <p>country: {selectedAthlete?.country}</p>
+      <p>
+        sport:{' '}
+        <Link to={`/sports/${selectedAthlete?.sportId._id}`}>
+          {' '}
+          {selectedAthlete?.sportId.name}
+        </Link>
+      </p>
+      <p>year of birth: {selectedAthlete?.birthYear}</p>
     </article>
   );
 };
