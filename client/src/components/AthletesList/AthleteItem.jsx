@@ -6,7 +6,7 @@ const AthleteItem = ({ athlete }) => {
   const navigateToAthlete = () => {
     navigate(`/athletes/${athlete._id}`);
   };
-  return <li onClick={navigateToAthlete}>{athlete.name}</li>;
+  return <li onClick={navigateToAthlete}>{athlete.name} </li>;
 };
 
 export default AthleteItem;

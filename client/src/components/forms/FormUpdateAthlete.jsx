@@ -1,26 +1,29 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { fetchAllSportsAsync } from '../../store/sportsSlice';
-import { fetchCreateAthleteAsync } from '../../store/athletesSlice';
-import { createValidationSchema } from '../../validation/athlete.validate';
-import CONSTANTS from '../../constants';
+import { updateValidationSchema } from '../../validation/athlete.validate';
 import styles from './form.module.scss';
+import CONSTANTS from '../../constants';
+import { fetchAllSportsAsync } from '../../store/sportsSlice';
+import { updateAthleteByIdAsync } from '../../store/athletesSlice';
 
-const FormCreateAthlete = () => {
-  const navigate = useNavigate();
+const FormUpdateAthlete = ({ athlete, handleShowForm }) => {
   const dispatch = useDispatch();
   const { sports } = useSelector((state) => state.sports);
-
   useEffect(() => {
     dispatch(fetchAllSportsAsync());
   }, [dispatch]);
-
-  const onSubmit = (values, formikBag) => {
-    dispatch(fetchCreateAthleteAsync(values));
-    formikBag.resetForm();
-    navigate(`/sports/${values.sportId}`);
+  const initialValues = {
+    name: athlete?.name || '',
+    country: athlete?.country || '',
+    birthYear: athlete?.birthYear || '',
+    sportId: athlete?.sportId._id || '',
+    avatar: '',
+  };
+  const onSubmit = (values) => {
+    console.log(values);
+    dispatch(updateAthleteByIdAsync({ id: athlete._id, formData: values }));
+    handleShowForm();
   };
   const showCountry = (country) => (
     <option key={country} value={country}>
@@ -34,17 +37,11 @@ const FormCreateAthlete = () => {
   );
   return (
     <Formik
-      initialValues={{
-        name: '',
-        country: '',
-        birthYear: 2000,
-        sportId: '',
-        avatar: '',
-      }}
+      initialValues={initialValues}
       onSubmit={onSubmit}
-      validationSchema={createValidationSchema}
+      validationSchema={updateValidationSchema}
     >
-      {({ setFieldValue }) => {
+      {({ setFieldValue, values }) => {
         return (
           <Form className={styles.form}>
             <label>
@@ -56,6 +53,7 @@ const FormCreateAthlete = () => {
               <span>Country</span>
               <select
                 name="country"
+                value={values.country}
                 onChange={(event) => {
                   setFieldValue(
                     'country',
@@ -82,6 +80,7 @@ const FormCreateAthlete = () => {
               <span>Sport</span>
               <select
                 name="sportId"
+                value={values.sportId}
                 onChange={(event) => {
                   setFieldValue(
                     'sportId',
@@ -105,7 +104,7 @@ const FormCreateAthlete = () => {
               />
               <ErrorMessage name="avatar" />
             </label>
-            <button type="submit">Create new athlete</button>
+            <button type="submit">Update athlete</button>
           </Form>
         );
       }}
@@ -113,4 +112,4 @@ const FormCreateAthlete = () => {
   );
 };
 
-export default FormCreateAthlete;
+export default FormUpdateAthlete;
