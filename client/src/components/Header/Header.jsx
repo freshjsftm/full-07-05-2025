@@ -5,9 +5,14 @@ import './Header.module.scss';
 const Header = () => {
   return (
     <header>
-      <Link to="/">Logo</Link>
-      <Link to="/create-sport">Create Sport</Link>
-      <Link to="/create-athlete">Create Athete</Link>
+      <div>
+        <Link to="/">Logo</Link>
+        <Link to="/analitics">Analitics</Link>
+      </div>
+      <div>
+        <Link to="/create-sport">Create Sport</Link>
+        <Link to="/create-athlete">Create Athete</Link>
+      </div>
     </header>
   );
 };
