@@ -12,6 +12,7 @@ const CONSTANTS = {
     'New Zealand',
     'England',
   ],
+  COLORS: ['red', 'blue', 'maroon', 'green', 'lime', 'purple', 'gray', 'pink'],
 };
 
 export default CONSTANTS;

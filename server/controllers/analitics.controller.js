@@ -95,9 +95,9 @@ module.exports.countAthletesByCountry = async (req, res, next) => {
           amount: 1,
         },
       },
-      {
-        $sort: { amount: -1 },
-      },
+      // {
+      //   $sort: { amount: -1 },
+      // },
     ]);
     res.status(200).send({ data });
   } catch (error) {

@@ -7,9 +7,11 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  Cell,
 } from 'recharts';
 import { fetchAthletesBySportAsync } from '../../store/analiticsSlice';
 import styles from './analitics.module.scss';
+import CONSTANTS from '../../constants';
 
 const AthletesBySport = () => {
   const dispatch = useDispatch();
@@ -19,7 +21,9 @@ const AthletesBySport = () => {
   useEffect(() => {
     dispatch(fetchAthletesBySportAsync());
   }, [dispatch]);
-
+  const showColorCell = (country, i) => (
+    <Cell key={country} fill={CONSTANTS.COLORS[i]} />
+  );
   return (
     <section className={styles.analitic}>
       <h2>Amount athletes in each sport</h2>
@@ -33,7 +37,7 @@ const AthletesBySport = () => {
             <XAxis dataKey="sport" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="count" fill="red" />
+            <Bar dataKey="count">{athletesBySport.map(showColorCell)}</Bar>
           </BarChart>
         </ResponsiveContainer>
       )}

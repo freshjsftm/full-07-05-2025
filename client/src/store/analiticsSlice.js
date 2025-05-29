@@ -1,6 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAthletesBySport } from '../api';
+import { fetchAthletesBySport, fetchAthletesByCountry } from '../api';
 import { pendingCase, rejectedCase } from './functions';
+
+export const fetchAthletesByCountryAsync = createAsyncThunk(
+  'analitics/fetchAthletesByCountryAsync',
+  async (_, thunkAPI) => {
+    try {
+      const response = await fetchAthletesByCountry();
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error?.message);
+    }
+  }
+);
 
 export const fetchAthletesBySportAsync = createAsyncThunk(
   'analitics/fetchAthletesBySportAsync',
@@ -20,6 +32,7 @@ const analiticsSlice = createSlice({
     isLoading: false,
     error: null,
     athletesBySport: [],
+    athletesByCountry: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -29,6 +42,13 @@ const analiticsSlice = createSlice({
       state.error = null;
       state.isLoading = false;
       state.athletesBySport = action.payload;
+    });
+    builder.addCase(fetchAthletesByCountryAsync.pending, pendingCase);
+    builder.addCase(fetchAthletesByCountryAsync.rejected, rejectedCase);
+    builder.addCase(fetchAthletesByCountryAsync.fulfilled, (state, action) => {
+      state.error = null;
+      state.isLoading = false;
+      state.athletesByCountry = action.payload;
     });
   },
 });
